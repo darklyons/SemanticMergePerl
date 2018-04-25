@@ -24,6 +24,9 @@
 # Arrays
 #
 
+# Import modules:
+	use PPI ;
+
 # Process arguments:
 	$COMMAND	= shift @ARGV
 			|| die "$0: Insufficient arguments supplied\n" ;
@@ -44,12 +47,38 @@
 # Main loop:
 	for(;;)
 	{
+	# Grab triplet:
 	    $INPUT	= <> ;	chomp($INPUT) ;
 	    last			if ($INPUT eq "end") ;
 	    $ENCODING	= <> ;	chomp($ENCODING) ;
 	    $OUTPUT	= <> ;	chomp($OUTPUT) ;
+
+	# Setup for parsing:
+	    -r $INPUT 
+		|| die "$0: Cannot open input file '$INPUT' - $!\n" ;
+	    open(my $outfh, ">", $OUTPUT) 
+		|| die "$0: Cannot open output file '$OUTPUT' - $!\n" ;
+
+	# Call the parser:
+	    SemanticParse($INPUT, $outfh) ;
 	}
 
 # Finish:
 	exit(0) ;
 
+#
+# SUBROUTINES
+#
+
+sub SemanticParse	# ($inputFile, $outfh)
+{
+    # Arguments:
+	my $inputFile	= shift ;
+	my $outfh	= shift ;
+
+    # Create the parse tree:
+	my $dom	= PPI::Document->new($inputFile) ;
+
+    # Process it:
+	print STDERR $dom->serialize ;
+}
