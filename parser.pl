@@ -36,9 +36,9 @@
 
 # Create flag file:
 	open(my $ffh, ">", $FLAGFILE) 
-		|| die "$0: Cannot create flag file '$FLAGFILE'\n" ;
+		|| die "$0: Cannot create flag file '$FLAGFILE' - $!\n" ;
 	print($ffh "flag file\n")
-		|| die "$0: Cannot write to flag file '$FLAGFILE'\n" ;
+		|| die "$0: Cannot write to flag file '$FLAGFILE' - $!\n" ;
 	close($ffh) ;
 
 # Main loop:
