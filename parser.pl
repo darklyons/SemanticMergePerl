@@ -80,5 +80,12 @@ sub SemanticParse	# ($inputFile, $outfh)
 	my $dom	= PPI::Document->new($inputFile) ;
 
     # Process it:
-	print STDERR $dom->serialize ;
+	foreach $element ( $dom->elements )
+	{
+	    print $outfh $element->class . "\t" .
+			 $element->significant . "\t" .
+			 "start: [" . $element->location->[0] . "," .
+			 $element->location->[1] . "]\t" .
+			 $element->content . "\n" ;
+	}
 }
