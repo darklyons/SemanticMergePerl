@@ -83,7 +83,8 @@ sub SemanticParse	# ($inputFile, $outfh)
 	my $dom	= PPI::Document->new($inputFile) ;
 
     # Process it:
-	my $node = $tree ;
+	my $child = $tree ;
+	my $node = $child ;
 	foreach $element ( $dom->elements )
 	{
 	    print STDERR $element->class . "\t" .
@@ -97,16 +98,17 @@ sub SemanticParse	# ($inputFile, $outfh)
 	# Detect packages;
 	    if ($type eq "Package") {
 		$name = $element->namespace ;
-		$node = $tree->addChild( "type" => $type, "name" => $name ) ;
+		$node = $child = $tree->addChild( "type" => $type, "name" => $name ) ;
 	    } elsif ($type eq "Include") {
 		$name = $element->module ;
-		$node->addChild( "type" => $type, "name" => $name ) ;
+		$node = $child->addChild( "type" => $type, "name" => $name ) ;
 	    } elsif ($type eq "Sub") {
 		$name = $element->name ;
-		$node->addChild( "type" => $type, "name" => $name ) ;
+		$node = $child->addChild( "type" => $type, "name" => $name ) ;
 	    } else {
-		$node->addChild( "type" => $type, "name" => $name ) ;
+		$node = $child->addChild( "type" => $type, "name" => $name ) ;
 	    }
+	    $node->addSpan($element->location->[0], $element->location->[1]-1) ;
 	}
 
 # YAML output:
@@ -116,6 +118,61 @@ sub SemanticParse	# ($inputFile, $outfh)
 #
 # CLASSES
 #
+
+package SemanticPair ;
+
+sub new		# ($one, $two)
+{
+	my $class	= shift ;
+	my $one		= shift ;
+	my $two		= shift ;
+
+	my $pair = [$one, $two] ;
+	return bless $pair, $class ;
+}
+
+
+sub print
+{
+	my $self	= shift ;
+	my $fh		= shift ;
+
+	print $fh "[" . $self->[0] . ", " . $self->[1] . "]" ;
+}
+
+
+package SemanticSpan ;
+
+sub new		# ($row, $col)
+{
+	my $class	= shift ;
+	my $row		= shift ;
+	my $col		= shift ;
+
+	my $pair = SemanticPair->new( $row, $col ) ;
+	my $span = { "start" => $pair } ;
+	return bless $span, $class ;
+}
+
+
+sub print
+{
+	my $self	= shift ;
+	my $fh		= shift ;
+
+	print $fh "{" ;
+	if ( $self->{start} ) {
+	    print $fh "start: " ;
+	    $self->{start}->print($fh) ;
+	}
+	if ( $self->{end} ) {
+	    print($fh ", ")	if ( $self->{start} ) ;
+	    print $fh "end: " ;
+	    $self->{end}->print($fh) ;
+	}
+	print $fh "}\n" ;
+}
+
 
 package SemanticNode ;
 
@@ -140,6 +197,20 @@ sub addChild
 
 # And return it:
 	return $node ;
+}
+
+
+sub addSpan
+{
+	my $self	= shift ;
+	my @span	= @_ ;
+
+# Add new span:
+	my $span = SemanticSpan->new(@span) ;
+	$self->{"locationSpan"} = $span ;
+
+# And return it:
+	return $span ;
 }
 
 
@@ -170,7 +241,10 @@ KEY:	foreach $key (@order)
 		{
 		    $child->print($fh, $indent + 2, "- ") ;
 		}
-	    } elsif (scalar $value) {
+	    } elsif (ref $value) {
+		print $fh " " x $indent . $start . $key . ": " ;
+		$value->print($fh) ;
+	    } else {
 		print $fh " " x $indent . $start . $key . ": " . $value . "\n" ;
 		$indent += length($start) ;
 		$start	= "" ;
