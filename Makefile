@@ -1,4 +1,2 @@
 test:
-	perl t/01_invoke.t
-	perl t/02_selfparse.t
-	perl t/03_testparse.t
+	perl -MTest::Harness -e '$$Test::Harness::verbose=0; runtests @ARGV;' t/*.t

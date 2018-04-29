@@ -20,6 +20,6 @@ script_stderr_like( 'argument must be', 'Message for bad command') ;
 
 script_runs([$script, 'shell', '.'], { exit => 21 }, 'Fail on bad flag file') ;
 
-script_runs([$script, 'shell', 'file.tmp~'], { stdin => \'end' }, 'Minimal invokation') ;
+script_runs([$script, 'shell', 't/out/ff'], { stdin => \'end' }, 'Minimal invokation') ;
 
 done_testing() ;
