@@ -76,16 +76,104 @@ sub SemanticParse	# ($inputFile, $outfh)
 	my $inputFile	= shift ;
 	my $outfh	= shift ;
 
+    # Init declarations tree:
+	my $tree = SemanticNode->new( "type" => "file", "name" => $inputFile ) ;
+
     # Create the parse tree:
 	my $dom	= PPI::Document->new($inputFile) ;
 
     # Process it:
+	my $node = $tree ;
 	foreach $element ( $dom->elements )
 	{
-	    print $outfh $element->class . "\t" .
+	    print STDERR $element->class . "\t" .
 			 $element->significant . "\t" .
 			 "start: [" . $element->location->[0] . "," .
 			 $element->location->[1] . "]\t" .
 			 $element->content . "\n" ;
+	# Extract element:
+	    my $type = $element->class ;	$type =~ s/.*::// ;
+	    my $name = $element->content ;	chomp($name) ;
+	# Detect packages;
+	    if ($type eq "Package") {
+		$name = $element->namespace ;
+		$node = $tree->addChild( "type" => $type, "name" => $name ) ;
+	    } elsif ($type eq "Include") {
+		$name = $element->module ;
+		$node->addChild( "type" => $type, "name" => $name ) ;
+	    } elsif ($type eq "Sub") {
+		$name = $element->name ;
+		$node->addChild( "type" => $type, "name" => $name ) ;
+	    } else {
+		$node->addChild( "type" => $type, "name" => $name ) ;
+	    }
+	}
+
+# YAML output:
+	$tree->print($outfh) ;
+}
+
+#
+# CLASSES
+#
+
+package SemanticNode ;
+
+sub new 	# %options
+{
+	my $class	= shift ;
+	my %options	= @_ ;
+
+	return bless { %options }, $class ;
+}
+
+
+sub addChild
+{
+	my $self	= shift ;
+	my %options	= @_ ;
+
+# Add new node:
+	$self->{"children"} = []	unless ( $self->{"children"} ) ;
+	my $node = SemanticNode->new( %options ) ;
+	push @{$self->{"children"}}, $node ;
+
+# And return it:
+	return $node ;
+}
+
+
+sub print
+{
+	my $self	= shift ;
+	my $fh		= shift ;
+	my $indent	= shift ;
+	my $start	= shift ;
+
+# Template order:
+	my @order = (	"type", "name",
+			"locationSpan", "headerSpan", "footerSpan",
+			"parsingeErrorsDetected",
+			"children", "parsingError",
+			"location", "message"
+		    ) ;
+
+# Descend through our tree
+KEY:	foreach $key (@order)
+	{
+	    my $value = $self->{$key} ;
+	    next KEY				unless ( $value ) ;
+	# Switch on type:
+	    if ($key eq "children") {
+		print $fh " " x $indent . $key . ":\n" ;
+		foreach $child (@$value)
+		{
+		    $child->print($fh, $indent + 2, "- ") ;
+		}
+	    } elsif (scalar $value) {
+		print $fh " " x $indent . $start . $key . ": " . $value . "\n" ;
+		$indent += length($start) ;
+		$start	= "" ;
+	    }
 	}
 }
