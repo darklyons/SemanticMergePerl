@@ -112,6 +112,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 	# Calculate span:
 	# TBD: Whitespace needs to be folded into appropriate element
 	    my($row, $col) = ($element->location->[0], $element->location->[1]-1) ;
+	    $tree->addSpan($row, $col)		unless ( $tree-> hasSpan ) ;
 	    $node->addSpan($row, $col) ;
 	    my($lines) = $element->content ;	$lines =~ s/\n$// ;
 	    my($nrows) = $lines =~ s/.*\n// ;
