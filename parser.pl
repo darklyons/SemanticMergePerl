@@ -111,10 +111,11 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    }
 	# Calculate span:
 	# TBD: Whitespace needs to be folded into appropriate element
+	    my($row, $col) = ($element->location->[0], $element->location->[1]-1) ;
+	    $node->addSpan($row, $col) ;
 	    my($lines) = $element->content ;	$lines =~ s/\n$// ;
 	    my($nrows) = $lines =~ s/.*\n// ;
-	    $node->addSpan($element->location->[0], $element->location->[1]-1) ;
-	    $node->endSpan($element->location->[0] + $nrows, length($lines)) ;
+	    $node->endSpan($row + $nrows, length($lines)) ;
 	}
 
 # YAML output:
