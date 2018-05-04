@@ -83,6 +83,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 	my $dom	= PPI::Document->new($inputFile) ;
 
     # Process it:
+	my($row, $col) ;
 	my $child = $tree ;
 	my $node = $child ;
 	foreach $element ( $dom->elements )
@@ -108,7 +109,12 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    } else {
 		$node = $child->addChild( "type" => $type, "name" => $name ) ;
 	    }
+	# Calculate span:
+	# TBD: Whitespace needs to be folded into appropriate element
+	    my($lines) = $element->content ;	$lines =~ s/\n$// ;
+	    my($nrows) = $lines =~ s/.*\n// ;
 	    $node->addSpan($element->location->[0], $element->location->[1]-1) ;
+	    $node->endSpan($element->location->[0] + $nrows, length($lines)) ;
 	}
 
 # YAML output:
@@ -152,6 +158,18 @@ sub new		# ($row, $col)
 	my $pair = SemanticPair->new( $row, $col ) ;
 	my $span = { "start" => $pair } ;
 	return bless $span, $class ;
+}
+
+
+sub addEnd	# ($row, $col)
+{
+	my $self	= shift ;
+	my $row		= shift ;
+	my $col		= shift ;
+
+	my $pair = SemanticPair->new( $row, $col ) ;
+	$self->{"end"} = $pair ;
+	return $pair ;
 }
 
 
@@ -211,6 +229,28 @@ sub addSpan
 
 # And return it:
 	return $span ;
+}
+
+
+sub endSpan
+{
+	my $self	= shift ;
+	my @span	= @_ ;
+
+# Set end of span:
+	$self->{"locationSpan"}->addEnd(@span) ;
+
+# And return it:
+	return $span ;
+}
+
+
+sub hasSpan
+{
+	my $self	= shift ;
+
+# Does it have a Location Span?
+	return $self->{"locationSpan"} ;
 }
 
 
