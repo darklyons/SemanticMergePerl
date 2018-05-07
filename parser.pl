@@ -111,12 +111,25 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    }
 	# Calculate span:
 	# TBD: Whitespace needs to be folded into appropriate element
+	# - start of span:
 	    my($row, $col) = ($element->location->[0], $element->location->[1]-1) ;
 	    $tree->addSpan($row, $col)		unless ( $tree-> hasSpan ) ;
 	    $node->addSpan($row, $col) ;
-	    my($lines) = $element->content ;	$lines =~ s/\n$// ;
-	    my($nrows) = $lines =~ s/.*\n// ;
-	    $node->endSpan($row + $nrows, length($lines)) ;
+	# - extent of span:
+	    my($lines) = $element->content ;
+	    my($final) = $lines =~ s/(\n)$// ;
+	    my($nrows) = $lines =~ s/.*\n//g ;
+	# - handle single eol case:
+	    $lines .= $final		if ( $final ) ;
+	# - end of span:
+	    if ($nrows == 0)
+	    {
+	    # Same line: add to existing number of columns:
+		$node->endSpan($row, $col + length($lines) - 1) ;
+	    } else {
+	    # New line: no existing number of columns:
+		$node->endSpan($row + $nrows, length($lines) - 1) ;
+	    }
 	}
 
 # YAML output:
