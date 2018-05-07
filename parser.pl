@@ -98,7 +98,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    my $name = $element->content ;	chomp($name) ;
 	# Detect packages;
 	    if ($type eq "Package") {
-		$child->endSpan(@endPair)		if ( @endPair ) ;
+		$child->endLocationSpan(@endPair)	if ( @endPair ) ;
 		$name = $element->namespace ;
 		$node = $child = $tree->addChild( "type" => $type, "name" => $name ) ;
 	    } elsif ($type eq "Include") {
@@ -110,12 +110,12 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    } else {
 		$node = $child->addChild( "type" => $type, "name" => $name ) ;
 	    }
-	# Calculate span:
+	# Calculate location span:
 	# TBD: Whitespace needs to be folded into appropriate element
 	# - start of span:
 	    my($row, $col) = ($element->location->[0], $element->location->[1]-1) ;
-	    $tree->addSpan($row, $col)		unless ( $tree-> hasSpan ) ;
-	    $node->addSpan($row, $col) ;
+	    $tree->addLocationSpan($row, $col)	unless ( $tree->hasLocationSpan ) ;
+	    $node->addLocationSpan($row, $col) ;
 	# - extent of span:
 	    my($lines) = $element->content ;
 	    my($final) = $lines =~ s/(\n)$// ;
@@ -131,12 +131,12 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    # New line: no existing number of columns:
 		@endPair = ($row + $nrows, length($lines) - 1) ;
 	    }
-	    $node->endSpan(@endPair) ;
+	    $node->endLocationSpan(@endPair) ;
 	}
 
 # Close remaining open spans:
-	$child->endSpan(@endPair)		if ( @endPair ) ;
-	$tree->endSpan(@endPair)		if ( @endPair ) ;
+	$child->endLocationSpan(@endPair)	if ( @endPair ) ;
+	$tree->endLocationSpan(@endPair)	if ( @endPair ) ;
 
 # YAML output:
 	$tree->print($outfh) ;
@@ -169,7 +169,7 @@ sub print
 }
 
 
-package SemanticSpan ;
+package SemanticLocationSpan ;
 
 sub new		# ($row, $col)
 {
@@ -241,20 +241,20 @@ sub addChild
 }
 
 
-sub addSpan
+sub addLocationSpan
 {
 	my $self	= shift ;
 	my @pair	= @_ ;
 
 # Add new span:
-	my $span = SemanticSpan->new(@pair) ;
+	my $span = SemanticLocationSpan->new(@pair) ;
 	$self->{"locationSpan"} = $span ;
 	return $self ;
 
 }
 
 
-sub endSpan
+sub endLocationSpan
 {
 	my $self	= shift ;
 	my @pair	= @_ ;
@@ -265,7 +265,7 @@ sub endSpan
 }
 
 
-sub hasSpan
+sub hasLocationSpan
 {
 	my $self	= shift ;
 
