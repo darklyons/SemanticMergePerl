@@ -159,6 +159,7 @@ sub print
 	my $fh		= shift ;
 
 	print $fh "[" . $self->[0] . ", " . $self->[1] . "]" ;
+	return $self ;
 }
 
 
@@ -184,7 +185,7 @@ sub addEnd	# ($row, $col)
 
 	my $pair = SemanticPair->new( $row, $col ) ;
 	$self->{"end"} = $pair ;
-	return $pair ;
+	return $self ;
 }
 
 
@@ -204,6 +205,7 @@ sub print
 	    $self->{end}->print($fh) ;
 	}
 	print $fh "}\n" ;
+	return $self ;
 }
 
 
@@ -236,27 +238,24 @@ sub addChild
 sub addSpan
 {
 	my $self	= shift ;
-	my @span	= @_ ;
+	my @pair	= @_ ;
 
 # Add new span:
-	my $span = SemanticSpan->new(@span) ;
+	my $span = SemanticSpan->new(@pair) ;
 	$self->{"locationSpan"} = $span ;
+	return $self ;
 
-# And return it:
-	return $span ;
 }
 
 
 sub endSpan
 {
 	my $self	= shift ;
-	my @span	= @_ ;
+	my @pair	= @_ ;
 
 # Set end of span:
-	$self->{"locationSpan"}->addEnd(@span) ;
-
-# And return it:
-	return $span ;
+	$self->{"locationSpan"}->addEnd(@pair) ;
+	return $self ;
 }
 
 
@@ -305,4 +304,5 @@ KEY:	foreach $key (@order)
 		$start	= "" ;
 	    }
 	}
+	return $self ;
 }
