@@ -104,6 +104,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 		$name = $element->namespace ;
 		$node = $child = $tree->addChild( "type" => $type, "name" => $name ) ;
 		$pair = $child->addSpan("headerSpan") ;
+		$child->addSpan("footerSpan", 0, -1) ;
 	    } elsif ($type eq "Include") {
 		$name = $element->module ;
 		$node = $child->addChild( "type" => $type, "name" => $name ) ;
@@ -148,6 +149,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 # Close remaining open spans:
 	$child->endLocationSpan(@endPair)	if ( @endPair ) ;
 	$tree->endLocationSpan(@endPair)	if ( @endPair ) ;
+	$tree->addSpan("footerSpan", 0, -1) ;
 
 # YAML output:
 	$tree->print($outfh) ;
@@ -311,7 +313,7 @@ sub addSpan
 	my $type	= shift || "span" ;
 
 # Add new span:
-	my $pair = SemanticPair->new() ;
+	my $pair = SemanticPair->new(@_) ;
 	$self->{$type} = $pair ;
 
 # And return it:
