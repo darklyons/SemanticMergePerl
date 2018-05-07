@@ -86,6 +86,8 @@ sub SemanticParse	# ($inputFile, $outfh)
 	my $child = $tree ;
 	my $node = $child ;
 	my @endPair ;
+	my $charCount = -1 ;
+	my $pair ;
 	foreach $element ( $dom->elements )
 	{
 	    print STDERR $element->class . "\t" .
@@ -101,14 +103,18 @@ sub SemanticParse	# ($inputFile, $outfh)
 		$child->endLocationSpan(@endPair)	if ( @endPair ) ;
 		$name = $element->namespace ;
 		$node = $child = $tree->addChild( "type" => $type, "name" => $name ) ;
+		$pair = $child->addSpan("headerSpan") ;
 	    } elsif ($type eq "Include") {
 		$name = $element->module ;
 		$node = $child->addChild( "type" => $type, "name" => $name ) ;
+		$pair = $node->addSpan() ;
 	    } elsif ($type eq "Sub") {
 		$name = $element->name ;
 		$node = $child->addChild( "type" => $type, "name" => $name ) ;
+		$pair = $node->addSpan() ;
 	    } else {
 		$node = $child->addChild( "type" => $type, "name" => $name ) ;
+		$pair = $node->addSpan() ;
 	    }
 	# Calculate location span:
 	# TBD: Whitespace needs to be folded into appropriate element
@@ -132,6 +138,11 @@ sub SemanticParse	# ($inputFile, $outfh)
 		@endPair = ($row + $nrows, length($lines) - 1) ;
 	    }
 	    $node->endLocationSpan(@endPair) ;
+
+	# Calculate character span:
+	    $pair->setStart($charCount+1) ;
+	    $charCount += length($element->content) ;
+	    $pair->setEnd($charCount) ;
 	}
 
 # Close remaining open spans:
@@ -156,6 +167,26 @@ sub new		# ($one, $two)
 
 	my $pair = [$one, $two] ;
 	return bless $pair, $class ;
+}
+
+
+sub setStart	# ($start)
+{
+	my $self	= shift ;
+	my $start	= shift ;
+
+	$self->[0] = $start ;
+	return $self ;
+}
+
+
+sub setEnd	# ($end)
+{
+	my $self	= shift ;
+	my $end		= shift ;
+
+	$self->[1] = $end ;
+	return $self ;
 }
 
 
@@ -210,7 +241,7 @@ sub print
 	    print $fh "end: " ;
 	    $self->{end}->print($fh) ;
 	}
-	print $fh "}\n" ;
+	print $fh "}" ;
 	return $self ;
 }
 
@@ -274,6 +305,20 @@ sub hasLocationSpan
 }
 
 
+sub addSpan
+{
+	my $self	= shift ;
+	my $type	= shift || "span" ;
+
+# Add new span:
+	my $pair = SemanticPair->new() ;
+	$self->{$type} = $pair ;
+
+# And return it:
+	return $pair ;
+}
+
+
 sub print
 {
 	my $self	= shift ;
@@ -283,7 +328,7 @@ sub print
 
 # Template order:
 	my @order = (	"type", "name",
-			"locationSpan", "headerSpan", "footerSpan",
+			"locationSpan", "headerSpan", "footerSpan", "span",
 			"parsingeErrorsDetected",
 			"children", "parsingError",
 			"location", "message"
@@ -304,6 +349,7 @@ KEY:	foreach $key (@order)
 	    } elsif (ref $value) {
 		print $fh " " x $indent . $start . $key . ": " ;
 		$value->print($fh) ;
+		print $fh "\n" ;
 	    } else {
 		print $fh " " x $indent . $start . $key . ": " . $value . "\n" ;
 		$indent += length($start) ;
