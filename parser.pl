@@ -83,9 +83,9 @@ sub SemanticParse	# ($inputFile, $outfh)
 	my $dom	= PPI::Document->new($inputFile) ;
 
     # Process it:
-	my($row, $col) ;
 	my $child = $tree ;
 	my $node = $child ;
+	my @endPair ;
 	foreach $element ( $dom->elements )
 	{
 	    print STDERR $element->class . "\t" .
@@ -98,6 +98,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    my $name = $element->content ;	chomp($name) ;
 	# Detect packages;
 	    if ($type eq "Package") {
+		$child->endSpan(@endPair)		if ( @endPair ) ;
 		$name = $element->namespace ;
 		$node = $child = $tree->addChild( "type" => $type, "name" => $name ) ;
 	    } elsif ($type eq "Include") {
@@ -125,12 +126,17 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    if ($nrows == 0)
 	    {
 	    # Same line: add to existing number of columns:
-		$node->endSpan($row, $col + length($lines) - 1) ;
+		@endPair = ($row, $col + length($lines) - 1) ;
 	    } else {
 	    # New line: no existing number of columns:
-		$node->endSpan($row + $nrows, length($lines) - 1) ;
+		@endPair = ($row + $nrows, length($lines) - 1) ;
 	    }
+	    $node->endSpan(@endPair) ;
 	}
+
+# Close remaining open spans:
+	$child->endSpan(@endPair)		if ( @endPair ) ;
+	$tree->endSpan(@endPair)		if ( @endPair ) ;
 
 # YAML output:
 	$tree->print($outfh) ;
