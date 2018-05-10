@@ -99,7 +99,10 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    my $type = $element->class ;	$type =~ s/.*::// ;
 	    my $name = $element->content ;	chomp($name) ;
 	# Detect packages;
-	    if ($type eq "Package") {
+	    if (! $element->significant ) {
+		$node = $child->addChild( "type" => $type ) ;
+		$pair = $node->addSpan() ;
+	    } elsif ($type eq "Package") {
 		$child->endLocationSpan(@endPair)	if ( @endPair ) ;
 		$name = $element->namespace ;
 		$node = $child = $tree->addChild( "type" => $type, "name" => $name ) ;
@@ -117,6 +120,11 @@ sub SemanticParse	# ($inputFile, $outfh)
 		$node = $child->addChild( "type" => $type, "name" => $name ) ;
 		$pair = $node->addSpan() ;
 	    }
+
+	# Keep track of the content by putting it into the message field:
+	# TBD: Remove content from message field when parser complete
+	    $node->set("message" => $element->content) ;
+
 	# Calculate location span:
 	# TBD: Whitespace needs to be folded into appropriate element
 	# - start of span:
