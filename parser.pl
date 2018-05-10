@@ -86,8 +86,9 @@ sub SemanticParse	# ($inputFile, $outfh)
     # - loop vars:
 	my $child = $tree ;
 	my $node = $child ;
-	my @endPair ;
+	my @curPair, @endPair ;
 	my $charCount = -1 ;
+	my $lastCount ;
 	my $pair ;
 	my $message ;
     #- loop body:
@@ -101,6 +102,8 @@ sub SemanticParse	# ($inputFile, $outfh)
 	# Extract element:
 	    my $type = $element->class ;	$type =~ s/.*::// ;
 	    my $content = $element->content ;
+	    @curPair = ($element->location->[0], $element->location->[1]-1) ;
+	    $lastCount = $charCount + 1 ;
 
 	# Detect packages;
 	    if (! $element->significant ) {
@@ -133,9 +136,8 @@ sub SemanticParse	# ($inputFile, $outfh)
 	# Calculate location span:
 	# TBD: Whitespace needs to be folded into appropriate element
 	# - start of span:
-	    my($row, $col) = ($element->location->[0], $element->location->[1]-1) ;
-	    $tree->addLocationSpan($row, $col)	unless ( $tree->hasLocationSpan ) ;
-	    $node->addLocationSpan($row, $col) ;
+	    $tree->addLocationSpan(@curPair)	unless ( $tree->hasLocationSpan ) ;
+	    $node->addLocationSpan(@curPair) ;
 	# - extent of span:
 	    my($lines) = $content ;
 	    my($final) = $lines =~ s/(\n)$// ;
@@ -143,19 +145,20 @@ sub SemanticParse	# ($inputFile, $outfh)
 	# - handle single eol case:
 	    $lines .= $final		if ( $final ) ;
 	# - end of span:
+	    @endPair = @curPair ;
 	    if ($nrows == 0)
 	    {
 	    # Same line: add to existing number of columns:
-		@endPair = ($row, $col + length($lines) - 1) ;
+		@endPair = ($endPair[0], $endPair[1] + length($lines) - 1) ;
 	    } else {
 	    # New line: no existing number of columns:
-		@endPair = ($row + $nrows, length($lines) - 1) ;
+		@endPair = ($endPair[0] + $nrows, length($lines) - 1) ;
 	    }
 	    $node->endLocationSpan(@endPair) ;
 
 	# Calculate character span:
-	    $pair->setStart($charCount+1) ;
 	    $charCount += length($content) ;
+	    $pair->setStart($lastCount) ;
 	    $pair->setEnd($charCount) ;
 	}
 
