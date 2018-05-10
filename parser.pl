@@ -151,8 +151,22 @@ sub SemanticParse	# ($inputFile, $outfh)
 	$tree->endLocationSpan(@endPair)	if ( @endPair ) ;
 	$tree->addSpan("footerSpan", 0, -1) ;
 
+# Parsing error?
+	if ( $dom->complete ) {
+	    $tree->set("parsingErrorsDetected", "false") ;
+	} else {
+	    $tree->set("parsingErrorsDetected", "true") ;
+	}
+
 # YAML output:
 	$tree->print($outfh) ;
+
+# Report status:
+	if ( $dom->complete ) {
+	    print STDOUT "OK\n" ;
+	} else {
+	    print STDOUT "KO\n" ;
+	}
 }
 
 #
@@ -259,6 +273,17 @@ sub new 	# %options
 }
 
 
+sub set		# ($key, $value)
+{
+	my $self	= shift ;
+	my $key		= shift ;
+	my $value	= shift ;
+
+	$self->{$key} = $value ;
+	return $self ;
+}
+
+
 sub addChild
 {
 	my $self	= shift ;
@@ -331,7 +356,7 @@ sub print
 # Template order:
 	my @order = (	"type", "name",
 			"locationSpan", "headerSpan", "footerSpan", "span",
-			"parsingeErrorsDetected",
+			"parsingErrorsDetected",
 			"children", "parsingError",
 			"location", "message"
 		    ) ;
