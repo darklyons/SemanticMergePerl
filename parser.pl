@@ -83,11 +83,14 @@ sub SemanticParse	# ($inputFile, $outfh)
 	my $dom	= PPI::Document->new($inputFile) ;
 
     # Process it:
+    # - loop vars:
 	my $child = $tree ;
 	my $node = $child ;
 	my @endPair ;
 	my $charCount = -1 ;
 	my $pair ;
+	my $message ;
+    #- loop body:
 	foreach $element ( $dom->elements )
 	{
 	    print STDERR $element->class . "\t" .
@@ -97,7 +100,8 @@ sub SemanticParse	# ($inputFile, $outfh)
 			 $element->content . "\n" ;
 	# Extract element:
 	    my $type = $element->class ;	$type =~ s/.*::// ;
-	    my $name = $element->content ;	chomp($name) ;
+	    my $content = $element->content ;
+
 	# Detect packages;
 	    if (! $element->significant ) {
 		$node = $child->addChild( "type" => $type ) ;
@@ -123,7 +127,8 @@ sub SemanticParse	# ($inputFile, $outfh)
 
 	# Keep track of the content by putting it into the message field:
 	# TBD: Remove content from message field when parser complete
-	    $node->set("message" => $element->content) ;
+	    $message = $content ;
+	    $node->set("message" => $message) ;
 
 	# Calculate location span:
 	# TBD: Whitespace needs to be folded into appropriate element
@@ -132,7 +137,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 	    $tree->addLocationSpan($row, $col)	unless ( $tree->hasLocationSpan ) ;
 	    $node->addLocationSpan($row, $col) ;
 	# - extent of span:
-	    my($lines) = $element->content ;
+	    my($lines) = $content ;
 	    my($final) = $lines =~ s/(\n)$// ;
 	    my($nrows) = $lines =~ s/.*\n//g ;
 	# - handle single eol case:
@@ -150,7 +155,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 
 	# Calculate character span:
 	    $pair->setStart($charCount+1) ;
-	    $charCount += length($element->content) ;
+	    $charCount += length($content) ;
 	    $pair->setEnd($charCount) ;
 	}
 
