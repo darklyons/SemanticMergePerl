@@ -88,7 +88,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 	my $node = $child ;
 	my @curPair, @endPair ;
 	my $charCount = -1 ;
-	my $lastCount ;
+	my $lastCount = -1;
 	my $pair ;
 	my $message ;
     #- loop body:
@@ -102,64 +102,74 @@ sub SemanticParse	# ($inputFile, $outfh)
 	# Extract element:
 	    my $type = $element->class ;	$type =~ s/.*::// ;
 	    my $content = $element->content ;
-	    @curPair = ($element->location->[0], $element->location->[1]-1) ;
-	    $lastCount = $charCount + 1 ;
-
-	# Detect packages;
-	    if (! $element->significant ) {
-		$node = $child->addChild( "type" => $type ) ;
-		$pair = $node->addSpan() ;
-	    } elsif ($type eq "Package") {
-		$child->endLocationSpan(@endPair)	if ( @endPair ) ;
-		$name = $element->namespace ;
-		$node = $child = $tree->addChild( "type" => $type, "name" => $name ) ;
-		$pair = $child->addSpan("headerSpan") ;
-		$child->addSpan("footerSpan", 0, -1) ;
-	    } elsif ($type eq "Include") {
-		$name = $element->module ;
-		$node = $child->addChild( "type" => $type, "name" => $name ) ;
-		$pair = $node->addSpan() ;
-	    } elsif ($type eq "Sub") {
-		$name = $element->name ;
-		$node = $child->addChild( "type" => $type, "name" => $name ) ;
-		$pair = $node->addSpan() ;
-	    } else {
-		$node = $child->addChild( "type" => $type ) ;
-		$pair = $node->addSpan() ;
+	    unless ( @curPair ) {
+		@curPair = ($element->location->[0], $element->location->[1]-1) ;
 	    }
+	    $charCount += length($content) ;
 
-	# Keep track of the content by putting it into the message field:
-	# TBD: Remove content from message field when parser complete
-	    $message = $content ;
-	    $node->set("message" => $message) ;
-
-	# Calculate location span:
-	# TBD: Whitespace needs to be folded into appropriate element
-	# - start of span:
-	    $tree->addLocationSpan(@curPair)	unless ( $tree->hasLocationSpan ) ;
-	    $node->addLocationSpan(@curPair) ;
-	# - extent of span:
+	# Calculate extent of element:
 	    my($lines) = $content ;
 	    my($final) = $lines =~ s/(\n)$// ;
 	    my($nrows) = $lines =~ s/.*\n//g ;
+	# - start of span:
+	    @endPair = ($element->location->[0], $element->location->[1]-1) ;
 	# - handle single eol case:
 	    $lines .= $final		if ( $final ) ;
-	# - end of span:
-	    @endPair = @curPair ;
-	    if ($nrows == 0)
-	    {
+	# - calc end of span:
+	    if ($nrows == 0) {
 	    # Same line: add to existing number of columns:
 		@endPair = ($endPair[0], $endPair[1] + length($lines) - 1) ;
 	    } else {
 	    # New line: no existing number of columns:
 		@endPair = ($endPair[0] + $nrows, length($lines) - 1) ;
 	    }
-	    $node->endLocationSpan(@endPair) ;
 
-	# Calculate character span:
-	    $charCount += length($content) ;
-	    $pair->setStart($lastCount) ;
-	    $pair->setEnd($charCount) ;
+	# Detect significant elements:
+	    if ( $element->significant ) {
+	    # Package (a container):
+		if ($type eq "Package") {
+		    $child->endLocationSpan(@endPair)	if ( $child->hasLocationSpan ) ;
+		    $name = $element->namespace ;
+		    $node = $child = $tree->addChild( "type" => $type, "name" => $name ) ;
+		    $pair = $child->addSpan("headerSpan") ;
+		    $child->addSpan("footerSpan", 0, -1) ;
+	    # Include (a node):
+		} elsif ($type eq "Include") {
+		    $name = $element->module ;
+		    $node = $child->addChild( "type" => $type, "name" => $name ) ;
+		    $pair = $node->addSpan() ;
+	    # Sub (a node):
+		} elsif ($type eq "Sub") {
+		    $name = $element->name ;
+		    $node = $child->addChild( "type" => $type, "name" => $name ) ;
+		    $pair = $node->addSpan() ;
+	    # Other (nodes):
+		} else {
+		    $node = $child->addChild( "type" => $type ) ;
+		    $pair = $node->addSpan() ;
+		}
+
+	    # Keep track of the content by putting it into the message field:
+	    # TBD: Remove content from message field when parser complete
+		$message .= $content ;
+		$node->set("message" => $message) ;
+		$message = "" ;
+
+	    # Calculate location span:
+	    # TBD: Trailing whitespace on same line needs to be folded into element
+		$tree->addLocationSpan(@curPair)	unless ( $tree->hasLocationSpan ) ;
+		$node->addLocationSpan(@curPair) ;
+		$node->endLocationSpan(@endPair) ;
+		@curPair = () ;
+
+	    # Calculate character span:
+		$pair->setStart($lastCount+1) ;
+		$pair->setEnd($charCount) ;
+		$lastCount = $charCount ;
+	    } else {
+	    # Whitespace, comment or similar:
+		$message .= $content ;
+	    }
 	}
 
 # Close remaining open spans:
