@@ -117,7 +117,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 		$node = $child->addChild( "type" => $type, "name" => $name ) ;
 		$pair = $node->addSpan() ;
 	    } else {
-		$node = $child->addChild( "type" => $type, "name" => $name ) ;
+		$node = $child->addChild( "type" => $type ) ;
 		$pair = $node->addSpan() ;
 	    }
 
