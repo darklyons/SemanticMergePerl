@@ -212,6 +212,16 @@ sub new		# ($one, $two)
 }
 
 
+sub rowIs	# ($row)
+{
+	my $self	= shift ;
+	my $row	= shift ;
+
+	return ($self->[0] == $row) ;
+}
+
+
+
 sub setStart	# ($start)
 {
 	my $self	= shift ;
@@ -265,6 +275,14 @@ sub addEnd	# ($row, $col)
 	my $pair = SemanticPair->new( $row, $col ) ;
 	$self->{"end"} = $pair ;
 	return $self ;
+}
+
+
+sub getEnd
+{
+	my $self	= shift ;
+
+	return $self->{"end"} ;
 }
 
 
@@ -346,6 +364,15 @@ sub endLocationSpan
 # Set end of span:
 	$self->{"locationSpan"}->addEnd(@pair) ;
 	return $self ;
+}
+
+
+sub getLocationSpan
+{
+	my $self	= shift ;
+
+# Return span:
+	return $self->{"locationSpan"} ;
 }
 
 
