@@ -383,8 +383,8 @@ sub print
 	my @order = (	"type", "name",
 			"locationSpan", "headerSpan", "footerSpan", "span",
 			"parsingErrorsDetected",
-			"children", "parsingError",
-			"location", "message"
+			"location", "message",
+			"children", "parsingError"
 		    ) ;
 
 # Descend through our tree
