@@ -156,7 +156,6 @@ sub SemanticParse	# ($inputFile, $outfh)
 		$message = "" ;
 
 	    # Calculate location span:
-	    # TBD: Trailing whitespace on same line needs to be folded into element
 		$tree->addLocationSpan(@curPair)	unless ( $tree->hasLocationSpan ) ;
 		$node->addLocationSpan(@curPair) ;
 		$node->endLocationSpan(@endPair) ;
@@ -168,6 +167,16 @@ sub SemanticParse	# ($inputFile, $outfh)
 		$lastCount = $charCount ;
 	    } else {
 	    # Whitespace, comment or similar:
+		my $nodePair ;
+		$nodePair = $node->getLocationSpan->getEnd
+						if ( $node->hasLocationSpan ) ;
+		if ($nodePair && $nodePair->rowIs(@curPair)) {
+		# On the same line - extend the span:
+		    $node->endLocationSpan(@curPair) ;
+		    $pair->setEnd($charCount) ;
+		    $lastCount = $charCount ;
+		    @curPair = () ;
+		}
 		$message .= $content ;
 	    }
 	}
@@ -314,6 +323,15 @@ sub new 	# %options
 	my %options	= @_ ;
 
 	return bless { %options }, $class ;
+}
+
+
+sub get		# ($key)
+{
+	my $self	= shift ;
+	my $key		= shift ;
+
+	return $self->{$key} ;
 }
 
 
