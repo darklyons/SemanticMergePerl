@@ -176,8 +176,12 @@ sub SemanticParse	# ($inputFile, $outfh)
 		    $pair->setEnd($charCount) ;
 		    $lastCount = $charCount ;
 		    @curPair = () ;
+		    $message = $node->get("message") ;
+		    $node->set("message", $message . $content) ;
+		    $message = "" ;
+		} else {
+		    $message .= $content ;
 		}
-		$message .= $content ;
 	    }
 	}
 
