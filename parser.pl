@@ -90,15 +90,10 @@ sub SemanticParse	# ($inputFile, $outfh)
 	my $charCount = -1 ;
 	my $lastCount = -1;
 	my $pair ;
-	my $message ;
+	my $debugmsg ;
     #- loop body:
 	foreach $element ( $dom->elements )
 	{
-	    print STDERR $element->class . "\t" .
-			 $element->significant . "\t" .
-			 "start: [" . $element->location->[0] . "," .
-			 $element->location->[1] . "]\t" .
-			 $element->content . "\n" ;
 	# Extract element:
 	    my $type = $element->class ;	$type =~ s/.*::// ;
 	    my $content = $element->content ;
@@ -149,11 +144,10 @@ sub SemanticParse	# ($inputFile, $outfh)
 		    $pair = $node->addSpan() ;
 		}
 
-	    # Keep track of the content by putting it into the message field:
-	    # TBD: Remove content from message field when parser complete
-		$message .= $content ;
-		$node->set("message" => $message) ;
-		$message = "" ;
+	    # Keep track of the content for debugging purposes:
+		$debugmsg .= $content ;
+		print(STDERR $debugmsg)		if ( $main::DEBUG ) ;
+		$debugmsg = "" ;
 
 	    # Calculate location span:
 		$tree->addLocationSpan(@curPair)	unless ( $tree->hasLocationSpan ) ;
@@ -176,11 +170,11 @@ sub SemanticParse	# ($inputFile, $outfh)
 		    $pair->setEnd($charCount) ;
 		    $lastCount = $charCount ;
 		    @curPair = () ;
-		    $message = $node->get("message") ;
-		    $node->set("message", $message . $content) ;
-		    $message = "" ;
+		    $debugmsg = $content ;
+		    print(STDERR $debugmsg)	if ( $main::DEBUG ) ;
+		    $debugmsg = "" ;
 		} else {
-		    $message .= $content ;
+		    $debugmsg .= $content ;
 		}
 	    }
 	}
@@ -189,6 +183,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 	$child->endLocationSpan(@endPair)	if ( @endPair ) ;
 	$tree->endLocationSpan(@endPair)	if ( @endPair ) ;
 	$tree->addSpan("footerSpan", 0, -1) ;
+	print(STDERR $debugmsg)		if ( $main::DEBUG ) ;
 
 # Parsing error?
 	if ( $dom->complete ) {
