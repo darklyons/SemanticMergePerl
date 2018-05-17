@@ -61,6 +61,7 @@
 
 	# Call the parser:
 	    SemanticParse($INPUT, $outfh) ;
+	    exit(0) ;
 	}
 
 # Finish:
@@ -193,7 +194,9 @@ sub SemanticParse	# ($inputFile, $outfh)
 	}
 
 # YAML output:
+	print $outfh "---\n" ;
 	$tree->print($outfh) ;
+	close($outfh) ;
 
 # Report status:
 	if ( $dom->complete ) {
