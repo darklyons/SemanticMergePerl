@@ -27,11 +27,16 @@
 # Import modules:
 	use PPI ;
 
+# Open a log file?
+	open(STDERR, ">>", "semanticperl.log.txt")	if ( $DEBUG ) ;
+
 # Process arguments:
 	$COMMAND	= shift @ARGV
 			|| die "$0: Insufficient arguments supplied\n" ;
+	print(STDERR "COMMAND=$COMMAND\n")		if ( $DEBUG ) ;
 	$FLAGFILE	= shift @ARGV 
 			|| die "$0: Insufficient arguments supplied\n" ;
+	print(STDERR "FLAGFILE=$FLAGFILE\n")		if ( $DEBUG ) ;
 	die "$0: Too many arguments supplied\n"			if ( @ARGV ) ;
 	if ($COMMAND ne "shell") {
 	    die "$0: The first argument must be 'shell'\n" ;
@@ -49,9 +54,12 @@
 	{
 	# Grab triplet:
 	    $INPUT	= <> ;	chomp($INPUT) ;
+	    print(STDERR "INPUT=$INPUT\n")		if ( $DEBUG ) ;
 	    last			if ($INPUT eq "end") ;
 	    $ENCODING	= <> ;	chomp($ENCODING) ;
+	    print(STDERR "ENCODING=$ENCODING\n")	if ( $DEBUG ) ;
 	    $OUTPUT	= <> ;	chomp($OUTPUT) ;
+	    print(STDERR "OUTPUT=$OUTPUT\n")		if ( $DEBUG ) ;
 
 	# Setup for parsing:
 	    -r $INPUT 
@@ -201,8 +209,10 @@ sub SemanticParse	# ($inputFile, $outfh)
 # Report status:
 	if ( $dom->complete ) {
 	    print STDOUT "OK\n" ;
+	    print(STDERR "OK\n")	if ( $DEBUG ) ;
 	} else {
 	    print STDOUT "KO\n" ;
+	    print(STDERR "KO\n")	if ( $DEBUG ) ;
 	}
 }
 
