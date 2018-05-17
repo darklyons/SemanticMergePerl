@@ -134,22 +134,22 @@ sub SemanticParse	# ($inputFile, $outfh)
 		if ($type eq "Package") {
 		    $child->endLocationSpan(@endPair)	if ( $child->hasLocationSpan ) ;
 		    $name = $element->namespace ;
-		    $node = $child = $tree->addChild( "type" => $type, "name" => $name ) ;
+		    $node = $child = $tree->addChild( "type" => "class", "name" => $name ) ;
 		    $pair = $child->addSpan("headerSpan") ;
 		    $child->addSpan("footerSpan", 0, -1) ;
 	    # Include (a node):
 		} elsif ($type eq "Include") {
 		    $name = $element->module ;
-		    $node = $child->addChild( "type" => $type, "name" => $name ) ;
+		    $node = $child->addChild( "type" => "include", "name" => $name ) ;
 		    $pair = $node->addSpan() ;
 	    # Sub (a node):
 		} elsif ($type eq "Sub") {
 		    $name = $element->name ;
-		    $node = $child->addChild( "type" => $type, "name" => $name ) ;
+		    $node = $child->addChild( "type" => "method", "name" => $name ) ;
 		    $pair = $node->addSpan() ;
 	    # Other (nodes):
 		} else {
-		    $node = $child->addChild( "type" => $type ) ;
+		    $node = $child->addChild( "type" => "include", "name" => $type ) ;
 		    $pair = $node->addSpan() ;
 		}
 
