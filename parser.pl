@@ -192,6 +192,10 @@ sub SemanticParse	# ($inputFile, $outfh)
 	$child->endLocationSpan(@endPair)	if ( @endPair ) ;
 	$tree->endLocationSpan(@endPair)	if ( @endPair ) ;
 	$tree->addSpan("footerSpan", 0, -1) ;
+	if ( @curPair ) {
+	# Put trailing non-significant tokens into a footer:
+	    $child->addSpan("footerSpan", $lastCount+1, $charCount) ;
+	}
 	print(STDERR $debugmsg)		if ( $main::DEBUG ) ;
 
 # Parsing error?
