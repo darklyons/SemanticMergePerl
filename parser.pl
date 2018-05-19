@@ -50,6 +50,7 @@
 	close($ffh) ;
 
 # Main loop:
+	$| = 1 ;
 	for(;;)
 	{
 	# Grab triplet:
@@ -77,7 +78,6 @@
 		print STDOUT "KO\n" ;
 		print(STDERR "KO\n")	if ( $DEBUG ) ;
 	    }
-	    exit(0) ;
 	}
 
 # Finish:
