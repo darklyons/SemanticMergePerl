@@ -62,13 +62,21 @@
 	    print(STDERR "OUTPUT=$OUTPUT\n")		if ( $DEBUG ) ;
 
 	# Setup for parsing:
+	    my $result ;
 	    -r $INPUT 
 		|| die "$0: Cannot open input file '$INPUT' - $!\n" ;
 	    open(my $outfh, ">", $OUTPUT) 
 		|| die "$0: Cannot open output file '$OUTPUT' - $!\n" ;
 
 	# Call the parser:
-	    SemanticParse($INPUT, $outfh) ;
+	    $result = SemanticParse($INPUT, $outfh) ;
+	    if ( $result ) {
+		print STDOUT "OK\n" ;
+		print(STDERR "OK\n")	if ( $DEBUG ) ;
+	    } else {
+		print STDOUT "KO\n" ;
+		print(STDERR "KO\n")	if ( $DEBUG ) ;
+	    }
 	    exit(0) ;
 	}
 
@@ -79,7 +87,7 @@
 # SUBROUTINES
 #
 
-sub SemanticParse	# ($inputFile, $outfh)
+sub SemanticParse	# ($inputFile, $outfh) -> $result
 {
     # Arguments:
 	my $inputFile	= shift ;
@@ -90,6 +98,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 
     # Create the parse tree:
 	my $dom	= PPI::Document->new($inputFile) ;
+	return $dom					unless ( $dom ) ;
 
     # Process it:
     # - loop vars:
@@ -211,13 +220,7 @@ sub SemanticParse	# ($inputFile, $outfh)
 	close($outfh) ;
 
 # Report status:
-	if ( $dom->complete ) {
-	    print STDOUT "OK\n" ;
-	    print(STDERR "OK\n")	if ( $DEBUG ) ;
-	} else {
-	    print STDOUT "KO\n" ;
-	    print(STDERR "KO\n")	if ( $DEBUG ) ;
-	}
+	return $tree ;
 }
 
 #

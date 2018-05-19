@@ -11,6 +11,6 @@ script_runs([$script, 'shell', 't/out/ff'],
 	    { stdin => \"unparse.pm\nutf-8\nt/out/unparse.yaml\nend" },
 	    'Parse package unparse.pm') ;
 
-script_stdout_is("KO\n", "Return error for unparse.pm") ;
+script_stdout_is("OK\n", "Return success for unparse.pm") ;
 
 done_testing() ;
