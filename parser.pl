@@ -51,7 +51,7 @@
 
 # Main loop:
 	$| = 1 ;
-	for(;;)
+	while (! eof)
 	{
 	# Grab triplet:
 	    $INPUT	= <> ;	chomp($INPUT) ;
@@ -63,14 +63,19 @@
 	    print(STDERR "OUTPUT=$OUTPUT\n")		if ( $DEBUG ) ;
 
 	# Setup for parsing:
-	    my $result ;
-	    -r $INPUT 
-		|| die "$0: Cannot open input file '$INPUT' - $!\n" ;
-	    open(my $outfh, ">", $OUTPUT) 
-		|| die "$0: Cannot open output file '$OUTPUT' - $!\n" ;
+	    my $result = 1 ;
+	    my $outfh ;
+	    if (! -r $INPUT) {
+		print(STDERR "$0: Cannot open input file '$INPUT' - $!\n") ;
+		$result = 0 ;
+	    }
+	    if (! open($outfh, ">", $OUTPUT)) {
+		print(STDERR "$0: Cannot open output file '$OUTPUT' - $!\n") ;
+		$result = 0 ;
+	    }
 
 	# Call the parser:
-	    $result = SemanticParse($INPUT, $outfh) ;
+	    $result = SemanticParse($INPUT, $outfh)	if ( $result ) ;
 	    if ( $result ) {
 		print STDOUT "OK\n" ;
 		print(STDERR "OK\n")	if ( $DEBUG ) ;
