@@ -69,7 +69,7 @@
 		print(STDERR "$0: Cannot open input file '$INPUT' - $!\n") ;
 		$result = 0 ;
 	    }
-	    if (! open($outfh, ">", $OUTPUT)) {
+	    if (! open($outfh, ">:encoding($ENCODING)", $OUTPUT)) {
 		print(STDERR "$0: Cannot open output file '$OUTPUT' - $!\n") ;
 		$result = 0 ;
 	    }
