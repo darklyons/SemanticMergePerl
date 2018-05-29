@@ -1,0 +1,51 @@
+---
+type: file
+name: t/in/Point.pm
+locationSpan: {start: [1, 0], end: [23, 2]}
+footerSpan: [0, -1]
+parsingErrorsDetected: false
+children:
+  - type: class
+    name: Point
+    locationSpan: {start: [1, 0], end: [13, 15]}
+    headerSpan: [0, 14]
+    footerSpan: [0, -1]
+    children:
+      - type: include
+        name: Moose
+        locationSpan: {start: [2, 0], end: [2, 55]}
+        span: [15, 70]
+      - type: include
+        name: Statement
+        locationSpan: {start: [3, 0], end: [4, 38]}
+        span: [71, 110]
+      - type: include
+        name: Statement
+        locationSpan: {start: [5, 0], end: [5, 38]}
+        span: [111, 149]
+      - type: method
+        name: clear
+        locationSpan: {start: [6, 0], end: [11, 1]}
+        span: [150, 220]
+  - type: class
+    name: Point3D
+    locationSpan: {start: [12, 0], end: [23, 2]}
+    headerSpan: [221, 238]
+    footerSpan: [0, -1]
+    children:
+      - type: include
+        name: Moose
+        locationSpan: {start: [14, 0], end: [14, 10]}
+        span: [239, 249]
+      - type: include
+        name: Statement
+        locationSpan: {start: [15, 0], end: [16, 16]}
+        span: [250, 267]
+      - type: include
+        name: Statement
+        locationSpan: {start: [17, 0], end: [18, 38]}
+        span: [268, 307]
+      - type: include
+        name: Statement
+        locationSpan: {start: [19, 0], end: [23, 2]}
+        span: [308, 373]
