@@ -1,0 +1,29 @@
+---
+type: file
+name: t/in/test.pm
+locationSpan: {start: [1, 0], end: [43, 0]}
+footerSpan: [0, -1]
+parsingErrorsDetected: false
+children:
+  - type: class
+    name: test
+    locationSpan: {start: [1, 0], end: [43, 0]}
+    headerSpan: [0, 14]
+    footerSpan: [470, 470]
+    children:
+      - type: include
+        name: strict
+        locationSpan: {start: [2, 0], end: [5, 12]}
+        span: [15, 44]
+      - type: include
+        name: Variable
+        locationSpan: {start: [6, 0], end: [7, 22]}
+        span: [45, 68]
+      - type: method
+        name: tester
+        locationSpan: {start: [8, 0], end: [12, 1]}
+        span: [69, 130]
+      - type: method
+        name: new
+        locationSpan: {start: [13, 0], end: [42, 1]}
+        span: [131, 469]

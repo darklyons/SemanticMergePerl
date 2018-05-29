@@ -1,0 +1,47 @@
+---
+type: file
+name: t/in/tryparse.pl
+locationSpan: {start: [1, 0], end: [45, 0]}
+footerSpan: [1106, 1107]
+parsingErrorsDetected: false
+children:
+  - type: include
+    name: Statement
+    locationSpan: {start: [1, 0], end: [22, 51]}
+    span: [0, 589]
+  - type: include
+    name: Statement
+    locationSpan: {start: [23, 0], end: [24, 51]}
+    span: [590, 668]
+  - type: include
+    name: Statement
+    locationSpan: {start: [25, 0], end: [26, 51]}
+    span: [669, 746]
+  - type: include
+    name: Variable
+    locationSpan: {start: [27, 0], end: [29, 12]}
+    span: [747, 778]
+  - type: include
+    name: Compound
+    locationSpan: {start: [30, 0], end: [34, 2]}
+    span: [779, 937]
+  - type: include
+    name: Statement
+    locationSpan: {start: [35, 0], end: [37, 30]}
+    span: [938, 995]
+  - type: include
+    name: Statement
+    locationSpan: {start: [38, 0], end: [38, 20]}
+    span: [996, 1016]
+  - type: include
+    name: Statement
+    locationSpan: {start: [39, 0], end: [39, 31]}
+    span: [1017, 1048]
+  - type: include
+    name: Statement
+    locationSpan: {start: [40, 0], end: [42, 23]}
+    span: [1049, 1094]
+  - type: include
+    name: Statement
+    locationSpan: {start: [43, 0], end: [43, 10]}
+    span: [1095, 1105]
