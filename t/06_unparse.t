@@ -3,7 +3,7 @@
 use strict ;
 use warnings ;
 use Test::Script ;
-use Test::More tests => 5 ;
+use Test::More tests => 3 ;
 
 my $script = 'parser.pl' ;
 
@@ -12,16 +12,11 @@ script_runs([$script, 'shell', 't/out/ff'],
 	    'Parse package unparse.pm') ;
 script_stdout_is("OK\n", "Return success for unparse.pm") ;
 SKIP: {
-    eval { use Test::Files } ;
+    eval { require Test::Files } ;
     skip "Test::Files not installed", 1		if ( $@ ) ;
 
     my $result = "unparse.yaml" ;
-    compare_ok("t/in/$result", "t/out/$result", "Output '$result' is correct") ;
+    Test::Files::compare_ok("t/in/$result", "t/out/$result", "Output '$result' is correct") ;
 }
-
-script_runs([$script, 'shell', 't/out/ff'],
-	    { stdin => \"t/in/missing file\nutf-8\nt/out/missing.yaml\nend" },
-	    'Parse missing file') ;
-script_stdout_is("KO\n", "Return failure for missing file") ;
 
 done_testing() ;
