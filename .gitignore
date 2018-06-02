@@ -1,2 +1,3 @@
+semanticperl.log.txt
 t/out/*
 !t/out/.gitignore
