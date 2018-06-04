@@ -51,7 +51,7 @@
 
 # Main loop:
 	$| = 1 ;
-	while (! eof)
+	while (! eof(STDIN))
 	{
 	# Grab triplet:
 	    $INPUT	= <> ;	chomp($INPUT) ;
