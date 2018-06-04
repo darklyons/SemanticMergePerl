@@ -106,6 +106,7 @@ sub SemanticParse	# ($inputFile, $outfh) -> $result
 	return $dom					unless ( $dom ) ;
 
     # Process it:
+	$tree->addLocationSpan(1, 0) ;
     # - loop vars:
 	my $child = $tree ;
 	my $node = $child ;
@@ -173,7 +174,6 @@ sub SemanticParse	# ($inputFile, $outfh) -> $result
 		$debugmsg = "" ;
 
 	    # Calculate location span:
-		$tree->addLocationSpan(@curPair)	unless ( $tree->hasLocationSpan ) ;
 		$node->addLocationSpan(@curPair) ;
 		$node->endLocationSpan(@endPair) ;
 		@curPair = () ;
