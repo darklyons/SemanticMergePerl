@@ -44,9 +44,11 @@
 
 # Create flag file:
 	open(my $ffh, ">", $FLAGFILE) 
-		|| die "$0: Cannot create flag file '$FLAGFILE' - $!\n" ;
+		|| warn "$0: Cannot create flag file '$FLAGFILE' - $!\n"
+		&& exit(255) ;
 	print($ffh "flag file\n")
-		|| die "$0: Cannot write to flag file '$FLAGFILE' - $!\n" ;
+		|| warn "$0: Cannot write to flag file '$FLAGFILE' - $!\n"
+		&& exit(255) ;
 	close($ffh) ;
 
 # Main loop:
@@ -86,6 +88,7 @@
 	}
 
 # Finish:
+	unlink($FLAGFILE) ;
 	exit(0) ;
 
 #

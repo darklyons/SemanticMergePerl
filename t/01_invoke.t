@@ -18,7 +18,7 @@ script_stderr_like( 'Too many arguments', 'Message for three arguments') ;
 script_runs([$script, 'unknown', 'file.tmp'], { exit => 255 }, 'Die on bad command') ;
 script_stderr_like( 'argument must be', 'Message for bad command') ;
 
-script_runs([$script, 'shell', '.'], { exit => 21 }, 'Fail on bad flag file') ;
+script_runs([$script, 'shell', '.'], { exit => 255 }, 'Fail on bad flag file') ;
 
 script_runs([$script, 'shell', 't/out/ff'], { stdin => \'end' }, 'Minimal invokation') ;
 
