@@ -1,7 +1,7 @@
 ---
 type: file
 name: parser.pl
-locationSpan: {start: [1, 0], end: [482, 1]}
+locationSpan: {start: [1, 0], end: [485, 1]}
 footerSpan: [0, -1]
 parsingErrorsDetected: false
 children:
@@ -39,123 +39,127 @@ children:
     span: [1299, 1383]
   - type: include
     name: Statement
-    locationSpan: {start: [44, 0], end: [47, 59]}
-    span: [1384, 1496]
+    locationSpan: {start: [44, 0], end: [48, 16]}
+    span: [1384, 1512]
   - type: include
     name: Statement
-    locationSpan: {start: [48, 0], end: [49, 61]}
-    span: [1497, 1585]
+    locationSpan: {start: [49, 0], end: [51, 16]}
+    span: [1513, 1617]
   - type: include
     name: Statement
-    locationSpan: {start: [50, 0], end: [50, 14]}
-    span: [1586, 1600]
+    locationSpan: {start: [52, 0], end: [52, 14]}
+    span: [1618, 1632]
   - type: include
     name: Statement
-    locationSpan: {start: [51, 0], end: [53, 9]}
-    span: [1601, 1624]
+    locationSpan: {start: [53, 0], end: [55, 9]}
+    span: [1633, 1656]
   - type: include
     name: Compound
-    locationSpan: {start: [54, 0], end: [86, 2]}
-    span: [1625, 2556]
+    locationSpan: {start: [56, 0], end: [88, 2]}
+    span: [1657, 2588]
   - type: include
     name: Statement
-    locationSpan: {start: [87, 0], end: [89, 10]}
-    span: [2557, 2578]
+    locationSpan: {start: [89, 0], end: [91, 20]}
+    span: [2589, 2620]
+  - type: include
+    name: Statement
+    locationSpan: {start: [92, 0], end: [92, 10]}
+    span: [2621, 2631]
   - type: method
     name: SemanticParse
-    locationSpan: {start: [90, 0], end: [229, 1]}
-    span: [2579, 6542]
+    locationSpan: {start: [93, 0], end: [232, 1]}
+    span: [2632, 6595]
   - type: class
     name: SemanticPair
-    locationSpan: {start: [230, 0], end: [288, 29]}
-    headerSpan: [6543, 6581]
+    locationSpan: {start: [233, 0], end: [291, 29]}
+    headerSpan: [6596, 6634]
     footerSpan: [0, -1]
     children:
       - type: method
         name: new
-        locationSpan: {start: [236, 0], end: [245, 1]}
-        span: [6582, 6729]
+        locationSpan: {start: [239, 0], end: [248, 1]}
+        span: [6635, 6782]
       - type: method
         name: rowIs
-        locationSpan: {start: [246, 0], end: [254, 1]}
-        span: [6730, 6825]
+        locationSpan: {start: [249, 0], end: [257, 1]}
+        span: [6783, 6878]
       - type: method
         name: setStart
-        locationSpan: {start: [255, 0], end: [265, 1]}
-        span: [6826, 6937]
+        locationSpan: {start: [258, 0], end: [268, 1]}
+        span: [6879, 6990]
       - type: method
         name: setEnd
-        locationSpan: {start: [266, 0], end: [275, 1]}
-        span: [6938, 7041]
+        locationSpan: {start: [269, 0], end: [278, 1]}
+        span: [6991, 7094]
       - type: method
         name: print
-        locationSpan: {start: [276, 0], end: [285, 1]}
-        span: [7042, 7169]
+        locationSpan: {start: [279, 0], end: [288, 1]}
+        span: [7095, 7222]
   - type: class
     name: SemanticLocationSpan
-    locationSpan: {start: [286, 0], end: [342, 21]}
-    headerSpan: [7170, 7202]
+    locationSpan: {start: [289, 0], end: [345, 21]}
+    headerSpan: [7223, 7255]
     footerSpan: [0, -1]
     children:
       - type: method
         name: new
-        locationSpan: {start: [289, 0], end: [299, 1]}
-        span: [7203, 7404]
+        locationSpan: {start: [292, 0], end: [302, 1]}
+        span: [7256, 7457]
       - type: method
         name: addEnd
-        locationSpan: {start: [300, 0], end: [311, 1]}
-        span: [7405, 7585]
+        locationSpan: {start: [303, 0], end: [314, 1]}
+        span: [7458, 7638]
       - type: method
         name: getEnd
-        locationSpan: {start: [312, 0], end: [319, 1]}
-        span: [7586, 7648]
+        locationSpan: {start: [315, 0], end: [322, 1]}
+        span: [7639, 7701]
       - type: method
         name: print
-        locationSpan: {start: [320, 0], end: [339, 1]}
-        span: [7649, 7971]
+        locationSpan: {start: [323, 0], end: [342, 1]}
+        span: [7702, 8024]
   - type: class
     name: SemanticNode
-    locationSpan: {start: [340, 0], end: [482, 1]}
-    headerSpan: [7972, 7996]
+    locationSpan: {start: [343, 0], end: [485, 1]}
+    headerSpan: [8025, 8049]
     footerSpan: [0, -1]
     children:
       - type: method
         name: new
-        locationSpan: {start: [343, 0], end: [350, 1]}
-        span: [7997, 8100]
+        locationSpan: {start: [346, 0], end: [353, 1]}
+        span: [8050, 8153]
       - type: method
         name: get
-        locationSpan: {start: [351, 0], end: [359, 1]}
-        span: [8101, 8189]
+        locationSpan: {start: [354, 0], end: [362, 1]}
+        span: [8154, 8242]
       - type: method
         name: set
-        locationSpan: {start: [360, 0], end: [370, 1]}
-        span: [8190, 8325]
+        locationSpan: {start: [363, 0], end: [373, 1]}
+        span: [8243, 8378]
       - type: method
         name: addChild
-        locationSpan: {start: [371, 0], end: [385, 1]}
-        span: [8326, 8576]
+        locationSpan: {start: [374, 0], end: [388, 1]}
+        span: [8379, 8629]
       - type: method
         name: addLocationSpan
-        locationSpan: {start: [386, 0], end: [398, 1]}
-        span: [8577, 8755]
+        locationSpan: {start: [389, 0], end: [401, 1]}
+        span: [8630, 8808]
       - type: method
         name: endLocationSpan
-        locationSpan: {start: [399, 0], end: [409, 1]}
-        span: [8756, 8896]
+        locationSpan: {start: [402, 0], end: [412, 1]}
+        span: [8809, 8949]
       - type: method
         name: getLocationSpan
-        locationSpan: {start: [410, 0], end: [418, 1]}
-        span: [8897, 8992]
+        locationSpan: {start: [413, 0], end: [421, 1]}
+        span: [8950, 9045]
       - type: method
         name: hasLocationSpan
-        locationSpan: {start: [419, 0], end: [427, 1]}
-        span: [8993, 9105]
+        locationSpan: {start: [422, 0], end: [430, 1]}
+        span: [9046, 9158]
       - type: method
         name: addSpan
-        locationSpan: {start: [428, 0], end: [441, 1]}
-        span: [9106, 9286]
+        locationSpan: {start: [431, 0], end: [444, 1]}
+        span: [9159, 9339]
       - type: method
         name: print
-        locationSpan: {start: [442, 0], end: [482, 1]}
-        span: [9287, 10159]
+        locationSpan: {start: [445, 0], end: [485, 1]}
+        span: [9340, 10212]
