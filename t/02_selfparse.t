@@ -7,7 +7,7 @@ use Test::More tests => 2 ;
 
 my $script = 'parser.pl' ;
 
-script_runs([$script, 'parse', 'parse.pl', 't/out/parset.yaml'],
+script_runs([$script, 'parse', 'parse.pl', 't/out/parser.yaml'],
 	    'Self parse') ;
 
 SKIP: {
