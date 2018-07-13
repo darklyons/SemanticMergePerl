@@ -12,7 +12,7 @@ script_compiles($script, 'Script compiles') ;
 script_runs($script, { exit => 255 }, 'Die on zero arguments') ;
 script_stderr_like( 'Insufficient arguments', 'Message for zero arguments') ;
 
-script_runs([$script, 'one', 'two', 'three'], { exit => 255 }, 'Die on three arguments') ;
+script_runs([$script, 'shell', 'two', 'three'], { exit => 255 }, 'Die on three arguments') ;
 script_stderr_like( 'Too many arguments', 'Message for three arguments') ;
 
 script_runs([$script, 'unknown', 'file.tmp'], { exit => 255 }, 'Die on bad command') ;
