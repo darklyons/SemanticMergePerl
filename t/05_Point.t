@@ -3,14 +3,12 @@
 use strict ;
 use warnings ;
 use Test::Script ;
-use Test::More tests => 3 ;
+use Test::More tests => 2 ;
 
 my $script = 'parser.pl' ;
 
-script_runs([$script, 'shell', 't/out/ff'],
-	    { stdin => \"t/in/Point.pm\nutf-8\nt/out/Point.yaml\nend" },
+script_runs([$script, 'parse', 't/in/Point.pm', 't/out/Point.yaml'],
 	    'Parse package Point.pm') ;
-script_stdout_is("OK\n", "Return success for Point.pm") ;
 SKIP: {
     eval { require Test::Files } ;
     skip "Test::Files not installed", 1		if ( $@ ) ;
