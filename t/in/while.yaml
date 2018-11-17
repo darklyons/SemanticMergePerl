@@ -1,0 +1,15 @@
+---
+type: file
+name: t/in/while.pl
+locationSpan: {start: [1, 0], end: [3, 10]}
+footerSpan: [0, -1]
+parsingErrorsDetected: false
+children:
+  - type: include
+    name: Compound
+    locationSpan: {start: [1, 0], end: [2, 17]}
+    span: [0, 35]
+  - type: include
+    name: Statement
+    locationSpan: {start: [3, 0], end: [3, 10]}
+    span: [36, 46]
