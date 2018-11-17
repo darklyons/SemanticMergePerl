@@ -3,14 +3,12 @@
 use strict ;
 use warnings ;
 use Test::Script ;
-use Test::More tests => 3 ;
+use Test::More tests => 2 ;
 
 my $script = 'parser.pl' ;
 
-script_runs([$script, 'shell', 't/out/ff'],
-	    { stdin => \"parser.pl\nutf-8\nt/out/parser.yaml\nend" },
+script_runs([$script, 'parse', 'parse.pl', 't/out/parser.yaml'],
 	    'Self parse') ;
-script_stdout_is("OK\n", "Return success on self parse") ;
 
 SKIP: {
     eval { require Test::Files } ;

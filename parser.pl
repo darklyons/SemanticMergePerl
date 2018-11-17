@@ -4,6 +4,7 @@
 #	parser	- Perl parser plugin for Semantic Merge
 # SYNTAX
 #	parser shell <flag-file>
+#	parser parse <input-file> <output-file>
 # DESCRIPTION
 #	Creates the <flag-file> on startup, then reads triplets of lines
 #	specifying an input Perl file, encoding, and output yaml file,
@@ -15,9 +16,15 @@
 #
 #	See https://users.semanticmerge.com/documentation/external-parsers/external-parsers-guide.shtml
 #	for details on the External Parser API and requirements.
+#
+#	For testing purposes, there is an alternative calling method where
+#	the command "parse" is given with input and output file names.
 # ARGUMENTS
 #	shell		always the word "shell"
 #	<flag-file>	full pathname of a file to create once ready to parse
+#	parse		always the word "parse"
+#	<input-file>	filename of a perl file to be parsed
+#	<output-file>	filename to write the yaml output to
 # AUTHOR
 #	Peter Lyons
 # GLOBALS
@@ -34,12 +41,31 @@
 	$COMMAND	= shift @ARGV
 			|| die "$0: Insufficient arguments supplied\n" ;
 	print(STDERR "COMMAND=$COMMAND\n")		if ( $DEBUG ) ;
-	$FLAGFILE	= shift @ARGV 
+    # - Switch on command type:
+	if ($COMMAND eq "shell") {
+	    $FLAGFILE	= shift @ARGV 
 			|| die "$0: Insufficient arguments supplied\n" ;
-	print(STDERR "FLAGFILE=$FLAGFILE\n")		if ( $DEBUG ) ;
-	die "$0: Too many arguments supplied\n"			if ( @ARGV ) ;
-	if ($COMMAND ne "shell") {
+	    print(STDERR "FLAGFILE=$FLAGFILE\n")	if ( $DEBUG ) ;
+	} elsif ($COMMAND eq "parse") {
+	    $INPUT	= shift @ARGV 
+			|| die "$0: Insufficient arguments supplied\n" ;
+	    print(STDERR "INPUT=$INPUT\n")		if ( $DEBUG ) ;
+	    $OUTPUT	= shift @ARGV 
+			|| die "$0: Insufficient arguments supplied\n" ;
+	    print(STDERR "OUTPUT=$OUTPUT\n")		if ( $DEBUG ) ;
+	} else {
 	    die "$0: The first argument must be 'shell'\n" ;
+	}
+    # - all arguments must be consumed:
+	die "$0: Too many arguments supplied\n"			if ( @ARGV ) ;
+
+# Once off parse?
+	if ($COMMAND eq "parse") {
+	    my $outfh ;
+	    open($outfh, ">", $OUTPUT) ||
+		die "$0: Cannot open output file '$OUTPUT' - $!\n" ;
+	    SemanticParse($INPUT, $outfh) ;
+	    exit(0) ;
 	}
 
 # Create flag file:
