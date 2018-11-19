@@ -3,7 +3,7 @@
 use strict ;
 use warnings ;
 use Test::Script ;
-use Test::More tests => 8 ;
+use Test::More tests => 9 ;
 
 my $script = 'parser.pl' ;
 
@@ -30,5 +30,8 @@ script_runs([$script, 'parse', "t/in/while.pl", "t/out/while.yaml"],
 
 script_runs([$script, 'parse', "t/in/while-compound.pl", "t/out/while-compound.yaml"],
 	    'Elements - while statement') ;
+
+script_runs([$script, 'parse', "t/in/sub.pl", "t/out/sub.yaml"],
+	    'Elements - subroutine') ;
 
 done_testing() ;

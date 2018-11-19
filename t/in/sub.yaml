@@ -1,0 +1,11 @@
+---
+type: file
+name: t/in/sub.pl
+locationSpan: {start: [1, 0], end: [4, 1]}
+footerSpan: [0, -1]
+parsingErrorsDetected: false
+children:
+  - type: method
+    name: mySub
+    locationSpan: {start: [1, 0], end: [4, 1]}
+    span: [0, 27]
