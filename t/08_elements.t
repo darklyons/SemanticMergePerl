@@ -17,19 +17,19 @@ script_runs([$script, 'parse', "t/in/for.pl", "t/out/for.yaml"],
 	    'Elements - for statement') ;
 
 script_runs([$script, 'parse', "t/in/for-compound.pl", "t/out/for-compound.yaml"],
-	    'Elements - for statement') ;
+	    'Elements - for compound statement') ;
 
 script_runs([$script, 'parse', "t/in/foreach.pl", "t/out/foreach.yaml"],
 	    'Elements - foreach statement') ;
 
 script_runs([$script, 'parse', "t/in/foreach-compound.pl", "t/out/foreach-compound.yaml"],
-	    'Elements - foreach statement') ;
+	    'Elements - foreach compound statement') ;
 
 script_runs([$script, 'parse', "t/in/while.pl", "t/out/while.yaml"],
 	    'Elements - while statement') ;
 
 script_runs([$script, 'parse', "t/in/while-compound.pl", "t/out/while-compound.yaml"],
-	    'Elements - while statement') ;
+	    'Elements - while compound statement') ;
 
 script_runs([$script, 'parse', "t/in/sub.pl", "t/out/sub.yaml"],
 	    'Elements - subroutine') ;
