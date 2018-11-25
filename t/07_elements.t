@@ -3,9 +3,19 @@
 use strict ;
 use warnings ;
 use Test::Script ;
-use Test::More tests => 9 ;
+use Test::More tests => 11 ;
 
 my $script = 'parser.pl' ;
+
+script_runs([$script, 'parse', 't/in/comment.pl', 't/out/comment.yaml'],
+	    'Elements - comment') ;
+SKIP: {
+    eval { require Test::Files } ;
+    skip "Test::Files not installed", 1		if ( $@ ) ;
+
+    my $result = "comment.yaml" ;
+    Test::Files::compare_ok("t/in/$result", "t/out/$result", "Output '$result' is correct") ;
+}
 
 script_runs([$script, 'parse', "t/in/if.pl", "t/out/if.yaml"],
 	    'Elements - if statement') ;
