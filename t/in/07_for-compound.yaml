@@ -1,6 +1,6 @@
 ---
 type: file
-name: t/in/foreach-compound.pl
+name: t/in/07_for-compound.pl
 locationSpan: {start: [1, 0], end: [6, 9]}
 footerSpan: [0, -1]
 parsingErrorsDetected: false
@@ -8,8 +8,8 @@ children:
   - type: include
     name: Compound
     locationSpan: {start: [1, 0], end: [5, 1]}
-    span: [0, 79]
+    span: [0, 68]
   - type: include
     name: Statement
     locationSpan: {start: [6, 0], end: [6, 9]}
-    span: [80, 89]
+    span: [69, 78]

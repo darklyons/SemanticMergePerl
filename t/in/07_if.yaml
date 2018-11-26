@@ -1,11 +1,11 @@
 ---
 type: file
-name: t/in/sub.pl
+name: t/in/07_if.pl
 locationSpan: {start: [1, 0], end: [4, 1]}
 footerSpan: [0, -1]
 parsingErrorsDetected: false
 children:
-  - type: method
-    name: mySub
+  - type: include
+    name: Compound
     locationSpan: {start: [1, 0], end: [4, 1]}
-    span: [0, 27]
+    span: [0, 64]

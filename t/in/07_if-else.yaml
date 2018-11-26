@@ -1,6 +1,6 @@
 ---
 type: file
-name: t/in/if-else.pl
+name: t/in/07_if-else.pl
 locationSpan: {start: [1, 0], end: [6, 1]}
 footerSpan: [0, -1]
 parsingErrorsDetected: false
