@@ -1,0 +1,11 @@
+---
+type: file
+name: t/in/07_do-compound.pl
+locationSpan: {start: [1, 0], end: [6, 1]}
+footerSpan: [0, -1]
+parsingErrorsDetected: true
+children:
+  - type: include
+    name: Statement
+    locationSpan: {start: [1, 0], end: [6, 1]}
+    span: [0, 51]

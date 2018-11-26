@@ -1,0 +1,11 @@
+---
+type: file
+name: t/in/07_do.pl
+locationSpan: {start: [1, 0], end: [3, 16]}
+footerSpan: [0, -1]
+parsingErrorsDetected: false
+children:
+  - type: include
+    name: Statement
+    locationSpan: {start: [1, 0], end: [3, 16]}
+    span: [0, 34]
