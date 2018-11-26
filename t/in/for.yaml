@@ -1,0 +1,15 @@
+---
+type: file
+name: t/in/for.pl
+locationSpan: {start: [1, 0], end: [3, 18]}
+footerSpan: [0, -1]
+parsingErrorsDetected: false
+children:
+  - type: include
+    name: Compound
+    locationSpan: {start: [1, 0], end: [2, 28]}
+    span: [0, 45]
+  - type: include
+    name: Statement
+    locationSpan: {start: [3, 0], end: [3, 18]}
+    span: [46, 64]

@@ -1,0 +1,15 @@
+---
+type: file
+name: t/in/foreach.pl
+locationSpan: {start: [1, 0], end: [3, 21]}
+footerSpan: [0, -1]
+parsingErrorsDetected: false
+children:
+  - type: include
+    name: Compound
+    locationSpan: {start: [1, 0], end: [2, 37]}
+    span: [0, 53]
+  - type: include
+    name: Statement
+    locationSpan: {start: [3, 0], end: [3, 21]}
+    span: [54, 75]
