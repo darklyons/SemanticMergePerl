@@ -130,8 +130,17 @@ sub SemanticParse	# ($inputFile, $outfh) -> $result
     # Init declarations tree:
 	my $tree = SemanticNode->new( "type" => "file", "name" => $inputFile ) ;
 
+    # Slurp the input:
+    # - without CRLF translation
+    # - and mapping CR to LF (prevents Windows miscount issue)
+        open(my $inpfh, "<:raw", $inputFile) ;
+	local $/ = undef ;
+	my $source = <$inpfh> ;
+	close($inpfh) ;
+	$source =~ s/\r/\n/g ;
+
     # Create the parse tree:
-	my $dom	= PPI::Document->new($inputFile) ;
+	my $dom	= PPI::Document->new(\$source) ;
 	return $dom					unless ( $dom ) ;
 
     # Process it:
